@@ -1,0 +1,208 @@
+@font-face {
+    font-family: espacio;
+    src: url(/fonts/Espacio.ttf);
+}ModernAntiqua-Regular
+@font-face {
+	font-family: modern;
+    src: url(/fonts/ModernAntiqua-Regular.ttf);
+}
+@font-face {
+	font-family: gravitas;
+    src: url(/fonts/GravitasOne.ttf);
+}
+body {
+  
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: url(http://webdesignerkits.com/backgrounds/77.png);
+  color:#5B6771;
+}
+
+a {
+  color: #00B7FF;
+}
+h1{
+	font-family: espacio;
+	text-transform: uppercase;
+	font-size: 60px;
+}
+h2{
+	font-family: modern;
+	font-size:28px;
+	line-height: 56px;
+}
+h2 b{
+	font-family:gravitas;
+	font-size: 31px;
+}
+h2 i{
+	font-family:espacio;
+	font-size: 28px;
+}
+
+/*NAVBAR*/
+
+.navbar{
+margin:0px;
+border-radius:0px;
+border:0px;
+background: #90D4D4;
+}
+.navbar-default .navbar-nav li{
+	padding:6px; 
+}
+.navbar-default .navbar-nav li a{
+	color:white;
+}
+.navbar-default .navbar-nav > .active , .navbar-default .navbar-nav > .active a {
+    color: #90D4D4;
+    background: white;
+}
+.navbar-default .navbar-nav > .active:hover , .navbar-default .navbar-nav > .active a:hover {
+    color: #90D4D4;
+    background: white;
+}
+
+.whiteBar{
+	background: white; 
+	height:20px;
+	width:100%;
+}
+#wrapper{
+	position: relative; width:100%;
+}
+#topLayer, #bottomLayer{
+	position:absolute; top:0px; left:0px; width:100%;
+}
+/*LOGO*/
+#logo{
+	position: relative;
+	width:482px;
+	top:-155px;
+	left:-20px;
+	z-index:999;
+}
+
+/*SPLASH AND IMAGES*/
+
+#splash{
+	width:100%;
+	height:538px;
+	overflow: hidden;
+}
+#splash img{
+	height:540px;
+}
+#to_save_top{
+	margin-top:10px;
+}
+#plan_confidently{
+	margin-top:40px;
+}
+#creds{
+	width:100%;
+	height:95px;
+	overflow: hidden;
+}
+#creds img{
+	height:95px;
+}
+#ready_copy{
+	margin-top: 200px; width:660px; position: relative; left:-5px; top:0px;
+}
+
+/*RIGHT BAR*/
+@media screen and (max-width: 600px)	
+{
+
+	.rbc{
+		display:none;
+	}
+
+}
+.rightbar{
+	min-width: 590px;
+}
+
+/*CHECKLIST*/
+.strike{
+	text-decoration: line-through;
+}
+
+#checkList{
+	width:465px;
+	min-width: 465px;
+	margin:auto;
+	margin-top:160px;
+	margin-bottom:100px;
+	position:relative;
+	left:0px; z-index:888;
+	border-radius: 12px;
+	background:white;
+	-webkit-box-shadow: 0px 0px 20px 0px rgba(7,38,29,.2);
+	-moz-box-shadow: 0px 0px 20px 0px rgba(7,38,29,.2);
+	box-shadow: 0px 0px 20px 0px rgba(7,38,29,.2);
+}
+
+#checkList h1{
+	color:#758189;
+	text-transform: uppercase;
+	margin: 27px 15px;
+	margin-bottom: 15px;
+	display: inline-block;
+	font-size:32px;
+	font-family: espacio;
+	letter-spacing: 1px;
+}
+#checkList ul{
+	margin:0px;
+	padding:0px;
+}
+#checkList ul li{
+	text-align: left;
+	border-bottom:2px solid #E8E8E7;
+	list-style: none;
+	width:100%;
+	margin:0px;
+	cursor: pointer;
+	padding: 17px 30px;
+	padding-bottom:15px;
+	box-sizing: padding-box;
+}
+#checkList ul li:nth-child(1){
+	border-top:2px solid #E8E8E7;
+}	
+#checkList .noteBox{
+	padding: 17px 30px;
+	padding-bottom:15px;
+	box-sizing: padding-box;
+	background: #e8efef;
+	width:100%;
+	color:#888; text-align: left;
+}
+#checkList .noteBox .note:focus{
+	outline: none;
+}
+#checkList .noteBox .note{
+	border-radius:5px;
+	border:0px; width: 100%;
+	min-height: 100px; padding: 20px;
+	color: #aaa;
+	box-sizing: padding-box;
+	background: white;
+	text-align: left;
+}
+#checkList ul li:hover{
+	background: #e8efef;
+	background: #efFeFe;
+	background:white;
+}
+#checkList ul li .checkbox{
+	padding-right:30px; display:inline; margin:auto;
+	position: relative; top:-7px;
+}
+#checkList ul li a{
+	color:#5B6872; font-weight:bold; font-size:15px;
+}
+#checkList ul li a:hover{
+	text-decoration: none;
+}

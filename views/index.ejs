@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html ng-app="app">
+  <head>
+    <title><%= title %></title>
+    <script type="text/javascript">
+    if (window.location.hash && window.location.hash == '#_=_') {
+        window.location.hash = '';
+        window.location.reload();
+    }
+</script>
+      <!-- Default Styles -->
+      <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+      <link rel='stylesheet' href='stylesheets/style.css' />
+      <link rel='stylesheet' href='stylesheets/animations.css' />
+      <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '435500533273650',
+      xfbml      : true,
+      version    : 'v2.3'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div>
+      <ul class="nav navbar-nav  navbar-right mynav">
+        <li class="active"><a href="">Home</a></li>
+        <li><a href="">Contact</a></li>
+        <li><a href="">About Us</a></li>
+        <li><a href="">Terms of Use</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="whiteBar"></div>
+<div id="wrapper">
+  <div id="bottomLayer">
+      <div id="splash">
+        <img src="images/flower.jpg"/>
+      </div>
+      <div class="whiteBar"></div>
+      <div id="creds">
+        <img src="images/creds.png"/>
+      </div>
+  </div>
+  <div id="topLayer">
+      <div class="col-sm-1"></div>
+      <div class="col-sm-4 text-center" >
+          <a class="navbar-brand" href="#"><img id="logo" src="images/logo.png"/></a>
+          <ng-view></ng-view>
+
+
+    <!-- Libraries -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-resource.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.25/angular-animate.min.js"></script>
+
+    
+    <!-- JQUERY -->
+    <script>
+    $(function(){
+    
+      $(".slide").hide();
+        
+    })
+    function slide(obj){
+
+      if(!$(obj).next().hasClass('open')){
+        $(obj).next().slideDown()
+        $(obj).next().addClass('open')
+      }else{
+        $(obj).next().slideUp()
+        $(obj).next().removeClass('open')
+      }
+    }
+    </script>
+
+    <!-- Template -->
+    <script type="text/ng-template" id="/todos.html">
+
+    <div id="checkList">
+
+      <ul>
+        <h1>«&nbsp;  Wedding Checklist &nbsp;»</h1>
+        <div  ng-repeat="todo in todos | filter: search">
+       <li ng-class="{strike:todo.completed};" onclick="slide(this)" >
+          <img class="checkbox unchecked" ng-click="toggle($index); $event.stopPropagation();" ng-model="todo.completed" ng-src="{{todo.completed && 'images/check.png' || 'images/checkbox.png'}}"/>
+          <a ng-show="!editing[$index]">{{todo.name}}</a>
+
+         <!--
+          <button ng-show="!editing[$index]" ng-click="edit($index)">edit</button>
+          <button ng-show="!editing[$index]" ng-click="remove($index)">remove</button>
+
+          <input ng-show="editing[$index]" type="text" ng-model="todo.name">
+          <button ng-show="editing[$index]" ng-click="update($index)">update</button>
+          <button ng-show="editing[$index]" ng-click="cancel($index)">cancel</button>
+
+          -->
+         
+        </li>
+         <div class="noteBox slide">
+            <div class="note" contentEditable="true" ng-keyup="update($index)" ng-model="todo.note"></div>
+          </div>
+        </div>
+      </ul>
+      New task <input type="text" ng-model="newTodo"><button ng-click="save()">Create</button>
+    </div>
+    </script>
+
+    <script type="text/ng-template" id="/todoDetails.html">
+      <h1>{{ todo.name }}</h1>
+      completed: <input type="checkbox" ng-model="todo.completed"><br>
+      note: <textarea ng-model="todo.note"></textarea><br><br>
+
+      <button ng-click="update()">update</button>
+      <button ng-click="remove()">remove</button>
+      <a href="/">Cancel</a>
+    </script>
+
+    <script>
+      angular.module('app', ['ngRoute', 'ngResource', 'ngAnimate' ])
+        //---------------
+        // Services
+        //---------------
+
+        .factory('Todos', ['$resource', function($resource){
+          return $resource('/todos/id/:id', null, {
+            'update': { method:'PUT' }
+          });
+        }])
+        .factory('userTodos', ['$resource', function($resource){
+          return $resource('/todos/user/:user', null, {
+
+          });
+        }])
+        
+
+
+
+        //---------------
+        // Directives
+        //---------------
+
+    .directive('contenteditable', ['$timeout', function($timeout) { return {
+      restrict: 'A',
+      require: '?ngModel',
+      link: function(scope, element, attrs, ngModel) {
+        // don't do anything unless this is actually bound to a model
+        if (!ngModel) {
+          return
+        }
+
+        // options
+        var opts = {}
+        angular.forEach([
+          'stripBr',
+          'noLineBreaks',
+          'selectNonEditable',
+          'moveCaretToEndOnChange',
+        ], function(opt) {
+          var o = attrs[opt]
+          opts[opt] = o && o !== 'false'
+      })
+
+      // view -> model
+      element.bind('input', function(e) {
+        scope.$apply(function() {
+          var html, html2, rerender
+          html = element.html()
+          rerender = false
+          if (opts.stripBr) {
+            html = html.replace(/<br>$/, '')
+          }
+          if (opts.noLineBreaks) {
+            html2 = html.replace(/<div>/g, '').replace(/<br>/g, '').replace(/<\/div>/g, '')
+            if (html2 !== html) {
+              rerender = true
+              html = html2
+            }
+          }
+          ngModel.$setViewValue(html)
+          if (rerender) {
+            ngModel.$render()
+          }
+          if (html === '') {
+            // the cursor disappears if the contents is empty
+            // so we need to refocus
+            $timeout(function(){
+              element[0].blur()
+              element[0].focus()
+            })
+          }
+        })
+      })
+
+      // model -> view
+      var oldRender = ngModel.$render
+      ngModel.$render = function() {
+        var el, el2, range, sel
+        if (!!oldRender) {
+          oldRender()
+        }
+        element.html(ngModel.$viewValue || '')
+        if (opts.moveCaretToEndOnChange) {
+          el = element[0]
+          range = document.createRange()
+          sel = window.getSelection()
+          if (el.childNodes.length > 0) {
+            el2 = el.childNodes[el.childNodes.length - 1]
+            range.setStartAfter(el2)
+          } else {
+            range.setStartAfter(el)
+          }
+          range.collapse(true)
+          sel.removeAllRanges()
+          sel.addRange(range)
+        }
+      }
+      if (opts.selectNonEditable) {
+        element.bind('click', function(e) {
+          var range, sel, target
+          target = e.toElement
+          if (target !== this && angular.element(target).attr('contenteditable') === 'false') {
+            range = document.createRange()
+            sel = window.getSelection()
+            range.setStartBefore(target)
+            range.setEndAfter(target)
+            sel.removeAllRanges()
+            sel.addRange(range)
+          }
+        })
+      }
+    }
+  }}])
+
+        
+
+       
+        //---------------
+        // Controllers
+        //---------------
+
+        .controller('TodoController', ['$scope', 'Todos','userTodos',  function ($scope, Todos, userTodos) {
+          $scope.editing = [];
+          $scope.todos = userTodos.query({user: '<%= id %>'});
+          // var todo = new Todos({ name: "", completed: false });
+          $scope.dataTest = function(){
+              $scope.todos = userTodos.query({user: 'default'});
+          }
+          $scope.toggle = function(index){
+            var todo = $scope.todos[index];
+            todo.completed = !todo.completed;
+            Todos.update({id: todo._id}, todo);
+          }
+          $scope.toggleNotes = function(index){
+            var todo = $scope.todos[index];
+            todo.showNotes = !todo.showNotes;
+            
+          }
+          $scope.save = function(){
+            if(!$scope.newTodo || $scope.newTodo.length < 1) return;
+            var todo = new Todos({ name: $scope.newTodo, completed: false, user: "<%= id %>" });
+
+            todo.$save(function(){
+              $scope.todos.push(todo);
+              $scope.newTodo = ''; // clear textbox
+            });
+          }
+
+          $scope.update = function(index){
+            var todo = $scope.todos[index];
+            Todos.update({id: todo._id}, todo);
+            $scope.editing[index] = false;
+          }
+
+          $scope.edit = function(index){
+            $scope.editing[index] = angular.copy($scope.todos[index]);
+          }
+
+          $scope.cancel = function(index){
+            $scope.todos[index] = angular.copy($scope.editing[index]);
+            $scope.editing[index] = false;
+          }
+
+          $scope.remove = function(index){
+            var todo = $scope.todos[index];
+            Todos.remove({id: todo._id}, function(){
+              $scope.todos.splice(index, 1);
+            });
+          }
+        }])
+
+        // .controller('TodoDetailCtrl', ['$scope', '$routeParams', 'Todos',  '$location', function ($scope, $routeParams, Todos, $location) {
+        //   $scope.todo = Todos.get({id: $routeParams.id });
+
+        //   $scope.update = function(){
+        //     Todos.update({id: $scope.todo._id}, $scope.todo, function(){
+        //       $location.url('/');
+        //     });
+        //   }
+
+        //   $scope.remove = function(){
+        //     Todos.remove({id: $scope.todo._id}, function(){
+        //       $location.url('/');
+        //     });
+        //   }
+        // }])
+
+        //---------------
+        // Routes
+        //---------------
+
+        .config(['$routeProvider', '$locationProvider', function ($routeProvider) {
+          // $locationProvider.html5Mode(true);
+          $routeProvider
+            .when('/', {
+              templateUrl: '/todos.html',
+              controller: 'TodoController'
+            })
+            .when('/login', {
+              templateUrl: '/todos.html',
+              controller: 'TodoController'
+            })
+            
+        }]);
+    </script>
+      </div>
+      <div class="col-sm-6 text-center rightbar">
+        <div class="rbc">
+          <img id="plan_confidently" src="images/plan_confidently.png"/>
+          <img src="images/free_tool.png"/>
+          <a href="/auth/facebook"><img style="cursor:pointer;" src="images/fb_signin_large.png" onmouseover="this.src='images/fb_signin_large_hover.png'" onmouseout="this.src='images/fb_signin_large.png'"/></a><br/>
+          <img id="to_save_top" src="images/to_save_dark.png"/>
+          <img id="ready_copy" src="images/ready_copy.png"/>
+        </div>
+      </div>
+      <div class="col-sm-1 text-center"></div>
+    
+  </div>
+  
+</div>
+   
+    
+  </body>
+</html>
